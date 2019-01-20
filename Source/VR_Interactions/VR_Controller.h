@@ -19,20 +19,18 @@ public:
 	UVR_Controller();
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	// Variables and References
 public:
-	//UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite)
 		float GrabRadius;
 
 private:
-
+	// Selects which Collision channels are considered when searching for grabbable objects.
 	TArray<TEnumAsByte<enum EObjectTypeQuery>> GrabFilter;
 
 	AGrabbable * GrabbedObject = nullptr;

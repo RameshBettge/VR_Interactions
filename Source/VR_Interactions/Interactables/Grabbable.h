@@ -8,6 +8,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Grabbable.generated.h"
 
+
 UCLASS()
 class VR_INTERACTIONS_API AGrabbable : public AActor
 {
@@ -27,11 +28,16 @@ public:
 
 
 public:
+	// TODO: Add this behavior to ChildClass 'Pickupable'
+	//UPROPERTY(EditAnywhere, meta = (ToolTip = "If object isn't parented to hand, it will try to follow and get stuck on solid obstacles."))
+	//	bool bParentToHand;
+
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* Mesh;
 
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* MySphereComponent;
+
 
 	bool bIsGrabbed;
 
@@ -40,7 +46,7 @@ private:
 
 public:
 	// TODO: Make reference to UVR_Controller possible. May be broken because of Grabbable.cpp's position in folder hierarchy.
-	//virtual bool GetGrabbed(UVR_Controller *Hand);
+	virtual bool GetGrabbed(UVR_Controller *Hand);
 
 	virtual void UpdateGrab(FVector Pos, FRotator Rot);
 

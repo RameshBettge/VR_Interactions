@@ -17,14 +17,7 @@ UVR_Controller::UVR_Controller()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-
-	//MySphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("My Sphere Component"));
-	//MySphereComponent->bVisible = true;
-	//MySphereComponent->bHiddenInGame = true;
-	////MySphereComponent->SetSphereRadius()
-
-	//MySphereComponent->SetupAttachment(this);
-
+	// Assign Object Typed (=Collision channels) to the GrabFilter
 	GrabFilter.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic));
 	GrabFilter.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
 	GrabFilter.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_PhysicsBody));
@@ -51,36 +44,39 @@ void UVR_Controller::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 bool UVR_Controller::GrabClosest()
 {
-	UE_LOG(LogTemp, Warning, TEXT(" ---  Attempting Grab   ---"));
+	bool bSucceeded = false;
 
 	TArray<AActor*> GrabbablesInRange = TArray<AActor*>();
 
-	// Using AActor's static class works.	-	Using AGrabbables doesn't.
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetComponentLocation(), 100.f, GrabFilter, AGrabbable::StaticClass(), TArray<AActor*>(), GrabbablesInRange);
-
+	// Get Grabbables in GrabRadius and saves them in Array
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetComponentLocation(), GrabRadius, GrabFilter, AGrabbable::StaticClass(), TArray<AActor*>(), GrabbablesInRange);
 	UE_LOG(LogTemp, Warning, TEXT("Grabbables found: %d"), GrabbablesInRange.Num());
 
 	if (GrabbablesInRange.Num() > 0)
 	{
+		bSucceeded = true;
+
+		// Display Debug Message on screen if at least one grabbable object is found TODO: Remove later
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Found sth. to grab!"), true, FVector2D(2, 2));
 	}
 
+	// Step through all found grabbables TODO: assign the closest one to variable GrabbedObject
 	for (int16 i = 0; i < GrabbablesInRange.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Grabbable in range: %s"), *GrabbablesInRange[i]->GetName());
-
 		AGrabbable *CastedGrabbable = Cast<AGrabbable>(GrabbablesInRange[i]);
 		if (CastedGrabbable)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Checked grabbable - it is indeed one!"));
+			UE_LOG(LogTemp, Warning, TEXT("Grabbable in range: %s"), *GrabbablesInRange[i]->GetName());
 		}
 	}
 
-	return true; // TODO: return if successful
+	// Let caller know if something was grabbed.
+	return bSucceeded;
 }
 
 void UVR_Controller::Release()
 {
+	// Let the grabbed object choose their behaviour independently
 	if (GrabbedObject)
 	{
 		GrabbedObject->Release(GetComponentLocation(), GetComponentRotation());
