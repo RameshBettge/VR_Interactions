@@ -2,6 +2,7 @@
 
 #include "VR_Controller.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
+#include "Interactables/Grabbable.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 
@@ -22,6 +23,8 @@ UVR_Controller::UVR_Controller()
 	//MySphereComponent->SetupAttachment(this);
 
 	GrabFilter.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic));
+	GrabFilter.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
+	GrabFilter.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_PhysicsBody));
 }
 
 
@@ -43,14 +46,28 @@ void UVR_Controller::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
-TArray<AActor*> UVR_Controller::GetActorsInRange()
+bool UVR_Controller::GrabClosest()
 {
-	TArray<AActor*> ActorsInRange = TArray<AActor*>();
+	UE_LOG(LogTemp, Warning, TEXT(" ---  Attempting Grab   ---"));
 
-	// TODO: Don't search for actors but just for one class ("GrabbableObject" or sth.)
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetComponentLocation(), 10000.f, GrabFilter, AActor::StaticClass(), TArray<AActor*>(), ActorsInRange);
+	TArray<AActor*> GrabbablesInRange = TArray<AActor*>();
 
+	// Using AActor's static class works.	-	Using AGrabbables doesn't.
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetComponentLocation(), 1000000.f, GrabFilter, AActor::StaticClass(), TArray<AActor*>(), GrabbablesInRange);
 
-	return ActorsInRange;
+	UE_LOG(LogTemp, Warning, TEXT("Grabbables found: %d"), GrabbablesInRange.Num());
+
+	for (int16 i = 0; i<GrabbablesInRange.Num(); i++)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Grabbable in range: %s"), *GrabbablesInRange[i]->GetName());
+
+		AGrabbable *CastedGrabbable = Cast<AGrabbable>(GrabbablesInRange[i]);
+		if (CastedGrabbable)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Checked grabbable - it is indeed one!"));
+		}
+	}
+
+	return true; // TODO: return if successful
 }
 

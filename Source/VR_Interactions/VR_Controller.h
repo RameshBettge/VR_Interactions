@@ -27,8 +27,8 @@ public:
 
 	// Variables and References
 public:
-	UPROPERTY(VisibleAnywhere)
-	USphereComponent* MySphereComponent;
+	//UPROPERTY(VisibleAnywhere)
+	//USphereComponent* MySphereComponent;
 
 private:
 	float GrabRadius = 0.25f;
@@ -39,5 +39,5 @@ private:
 	//Functions
 public:
 		UFUNCTION(BlueprintCallable)
-		TArray<AActor*> GetActorsInRange();
+		bool GrabClosest();
 };
