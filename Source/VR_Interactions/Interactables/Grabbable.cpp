@@ -13,6 +13,7 @@ AGrabbable::AGrabbable()
 	MySphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("My Sphere Component"));
 	MySphereComponent->bVisible = true;
 	MySphereComponent->bHiddenInGame = false;
+	MySphereComponent->SetRelativeLocation(FVector::ZeroVector);
 	//MySphereComponent->SetSphereRadius()
 
 	//RootComponent = MySphereComponent;
@@ -37,10 +38,13 @@ void AGrabbable::Tick(float DeltaTime)
 
 }
 
-bool AGrabbable::GetGrabbed(UVR_Controller Hand)
-{
-	return false;
-}
+//bool AGrabbable::GetGrabbed(UVR_Controller *Hand)
+//{
+//	//this->Hand = Hand;
+//	//bIsGrabbed = true;
+//
+//	return false;
+//}
 
 void AGrabbable::UpdateGrab(FVector Pos, FRotator Rot)
 {
@@ -48,5 +52,6 @@ void AGrabbable::UpdateGrab(FVector Pos, FRotator Rot)
 
 void AGrabbable::Release(FVector Pos, FRotator Rot)
 {
+	//bIsGrabbed = false;
 }
 

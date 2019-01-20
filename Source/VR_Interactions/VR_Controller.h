@@ -5,15 +5,16 @@
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
 #include "Runtime/Engine/Classes/Components/SphereComponent.h"
+#include "Interactables/Grabbable.h"
 #include "VR_Controller.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class VR_INTERACTIONS_API UVR_Controller : public USceneComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UVR_Controller();
 
@@ -21,23 +22,27 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	// Variables and References
 public:
-	//UPROPERTY(VisibleAnywhere)
-	//USphereComponent* MySphereComponent;
+	//UPROPERTY(BlueprintReadWrite)
+		float GrabRadius;
 
 private:
-	float GrabRadius = 0.25f;
-		
+
 	TArray<TEnumAsByte<enum EObjectTypeQuery>> GrabFilter;
+
+	//AGrabbable * GrabbedObject = nullptr;
 
 
 	//Functions
 public:
-		UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 		bool GrabClosest();
+
+	UFUNCTION(BlueprintCallable)
+		void Release();
 };

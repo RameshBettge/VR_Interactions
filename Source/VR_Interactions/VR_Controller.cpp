@@ -2,8 +2,11 @@
 
 #include "VR_Controller.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
-#include "Interactables/Grabbable.h"
 #include "Kismet/KismetSystemLibrary.h"
+
+// For logging on screen
+#include <EngineGlobals.h>
+#include <Runtime/Engine/Classes/Engine/Engine.h>
 
 
 
@@ -34,7 +37,7 @@ void UVR_Controller::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+
 }
 
 
@@ -53,11 +56,16 @@ bool UVR_Controller::GrabClosest()
 	TArray<AActor*> GrabbablesInRange = TArray<AActor*>();
 
 	// Using AActor's static class works.	-	Using AGrabbables doesn't.
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetComponentLocation(), 1000000.f, GrabFilter, AActor::StaticClass(), TArray<AActor*>(), GrabbablesInRange);
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetComponentLocation(), 100.f, GrabFilter, AGrabbable::StaticClass(), TArray<AActor*>(), GrabbablesInRange);
 
 	UE_LOG(LogTemp, Warning, TEXT("Grabbables found: %d"), GrabbablesInRange.Num());
 
-	for (int16 i = 0; i<GrabbablesInRange.Num(); i++)
+	if (GrabbablesInRange.Num() > 0)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Found sth. to grab!"), true, FVector2D(2, 2));
+	}
+
+	for (int16 i = 0; i < GrabbablesInRange.Num(); i++)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Grabbable in range: %s"), *GrabbablesInRange[i]->GetName());
 
@@ -69,5 +77,15 @@ bool UVR_Controller::GrabClosest()
 	}
 
 	return true; // TODO: return if successful
+}
+
+void UVR_Controller::Release()
+{
+	//if (GrabbedObject)
+	//{
+	//	GrabbedObject->Release(GetComponentLocation(), GetComponentRotation());
+	//}
+
+	//GrabbedObject = nullptr;
 }
 

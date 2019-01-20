@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "VR_Controller.h"
+#include "../VR_Controller.h"
 #include "Components/StaticMeshComponent.h"
 #include "Grabbable.generated.h"
 
@@ -33,12 +33,14 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* MySphereComponent;
 
-
-protected:
 	bool bIsGrabbed;
 
+private:
+	//UVR_Controller* Hand;
+
 public:
-	virtual bool GetGrabbed(UVR_Controller Hand);
+	// TODO: Make reference to UVR_Controller possible. May be broken because of Grabbable.cpp's position in folder hierarchy.
+	//virtual bool GetGrabbed(UVR_Controller *Hand);
 
 	virtual void UpdateGrab(FVector Pos, FRotator Rot);
 
