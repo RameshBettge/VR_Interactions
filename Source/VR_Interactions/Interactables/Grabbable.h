@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "../VR_Controller.h"
+#include "Runtime/Engine/Classes/Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Grabbable.generated.h"
 
@@ -36,7 +36,7 @@ public:
 	bool bIsGrabbed;
 
 private:
-	//UVR_Controller* Hand;
+	class UVR_Controller* Hand;
 
 public:
 	// TODO: Make reference to UVR_Controller possible. May be broken because of Grabbable.cpp's position in folder hierarchy.

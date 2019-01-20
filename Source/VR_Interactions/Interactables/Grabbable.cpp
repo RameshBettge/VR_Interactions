@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Grabbable.h"
+#include "VR_Controller.h"
 
 // Sets default values
 AGrabbable::AGrabbable()

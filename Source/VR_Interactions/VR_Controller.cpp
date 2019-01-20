@@ -81,11 +81,11 @@ bool UVR_Controller::GrabClosest()
 
 void UVR_Controller::Release()
 {
-	//if (GrabbedObject)
-	//{
-	//	GrabbedObject->Release(GetComponentLocation(), GetComponentRotation());
-	//}
+	if (GrabbedObject)
+	{
+		GrabbedObject->Release(GetComponentLocation(), GetComponentRotation());
+	}
 
-	//GrabbedObject = nullptr;
+	GrabbedObject = nullptr;
 }
 

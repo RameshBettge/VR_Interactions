@@ -35,7 +35,7 @@ private:
 
 	TArray<TEnumAsByte<enum EObjectTypeQuery>> GrabFilter;
 
-	//AGrabbable * GrabbedObject = nullptr;
+	AGrabbable * GrabbedObject = nullptr;
 
 
 	//Functions
