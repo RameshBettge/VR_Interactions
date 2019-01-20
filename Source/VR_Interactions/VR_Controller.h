@@ -33,6 +33,8 @@ public:
 private:
 	float GrabRadius = 0.25f;
 		
+	TArray<TEnumAsByte<enum EObjectTypeQuery>> GrabFilter;
+
 
 	//Functions
 public:

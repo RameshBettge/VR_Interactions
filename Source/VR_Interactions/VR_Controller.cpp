@@ -14,12 +14,14 @@ UVR_Controller::UVR_Controller()
 	PrimaryComponentTick.bCanEverTick = true;
 
 
-	MySphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("My Sphere Component"));
-	MySphereComponent->bVisible = true;
-	MySphereComponent->bHiddenInGame = true;
-	//MySphereComponent->SetSphereRadius()
+	//MySphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("My Sphere Component"));
+	//MySphereComponent->bVisible = true;
+	//MySphereComponent->bHiddenInGame = true;
+	////MySphereComponent->SetSphereRadius()
 
-	MySphereComponent->SetupAttachment(this);
+	//MySphereComponent->SetupAttachment(this);
+
+	GrabFilter.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic));
 }
 
 
@@ -45,13 +47,10 @@ TArray<AActor*> UVR_Controller::GetActorsInRange()
 {
 	TArray<AActor*> ActorsInRange = TArray<AActor*>();
 
-	//const TArray<EnumToByte<EObjectTypeQuery>> ObjectTypes;
-	//TArray<TEnumAsByte<enum EObjectTypeQuery>> ObjectTypes;
-	////const TArray<EObjectTypeQuery> ObjectTypes;
-
-	//UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetComponentLocation(), 100.f, ObjectTypes, AActor::StaticClass(), TArray<AActor*>(), ActorsInRange);
+	// TODO: Don't search for actors but just for one class ("GrabbableObject" or sth.)
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetComponentLocation(), 10000.f, GrabFilter, AActor::StaticClass(), TArray<AActor*>(), ActorsInRange);
 
 
-	return TArray<AActor*>();
+	return ActorsInRange;
 }
 
