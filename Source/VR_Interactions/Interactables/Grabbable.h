@@ -51,5 +51,4 @@ public:
 	virtual void UpdateGrab(FVector Pos, FRotator Rot);
 
 	virtual void Release(FVector Pos, FRotator Rot);
-
 };

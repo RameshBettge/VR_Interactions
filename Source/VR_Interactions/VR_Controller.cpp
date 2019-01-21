@@ -48,8 +48,21 @@ bool UVR_Controller::GrabClosest()
 
 	TArray<AActor*> GrabbablesInRange = TArray<AActor*>();
 
+	// Ideally, the actual Controller's location is used to create the overlap - the VR_Controller could have an accidental offset.
+	USceneComponent *Parent = GetAttachParent();
+	FVector OverlapLocation = FVector::ZeroVector;
+	if (Parent)
+	{
+		OverlapLocation = Parent->GetComponentLocation();
+	}
+	else // Will most likely never be the case
+	{
+		OverlapLocation = GetComponentLocation();
+	}
+
+
 	// Get Grabbables in GrabRadius and saves them in Array
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetComponentLocation(), GrabRadius, GrabFilter, AGrabbable::StaticClass(), TArray<AActor*>(), GrabbablesInRange);
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), OverlapLocation, GrabRadius, GrabFilter, AGrabbable::StaticClass(), TArray<AActor*>(), GrabbablesInRange);
 	UE_LOG(LogTemp, Warning, TEXT("Grabbables found: %d"), GrabbablesInRange.Num());
 
 	if (GrabbablesInRange.Num() > 0)
@@ -57,7 +70,13 @@ bool UVR_Controller::GrabClosest()
 		bSucceeded = true;
 
 		// Display Debug Message on screen if at least one grabbable object is found TODO: Remove later
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Found sth. to grab!"), true, FVector2D(2, 2));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Found sth. to grab!"), true, FVector2D(2, 2));
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Found:  %d"), GrabbablesInRange.Num()), true, FVector2D(2, 2));
+	}
+	else 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Nothing found!"), true, FVector2D(2, 2));
 	}
 
 	// Step through all found grabbables TODO: assign the closest one to variable GrabbedObject
@@ -67,6 +86,8 @@ bool UVR_Controller::GrabClosest()
 		if (CastedGrabbable)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Grabbable in range: %s"), *GrabbablesInRange[i]->GetName());
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%s"), *GrabbablesInRange[i]->GetName()), true, FVector2D(2, 2));
+
 		}
 	}
 

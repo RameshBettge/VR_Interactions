@@ -16,9 +16,12 @@ AGrabbable::AGrabbable()
 	MySphereComponent->bVisible = true;
 	// TODO: Set bHiddenInGame to true as soon as debugging is not needed anymore.
 	MySphereComponent->bHiddenInGame = false;
-	MySphereComponent->SetRelativeLocation(FVector::ZeroVector);
+	//Mesh->SetRelativeLocation(FVector::ZeroVector);
 
-	RootComponent = Mesh;
+	MySphereComponent->SetSphereRadius(0.2f);
+
+	RootComponent = MySphereComponent;
+	Mesh->SetupAttachment(MySphereComponent);
 }
 
 // Called when the game starts or when spawned

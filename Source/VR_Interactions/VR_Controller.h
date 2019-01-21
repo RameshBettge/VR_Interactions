@@ -29,6 +29,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		float GrabRadius;
 
+
 private:
 	// Selects which Collision channels are considered when searching for grabbable objects.
 	TArray<TEnumAsByte<enum EObjectTypeQuery>> GrabFilter;
